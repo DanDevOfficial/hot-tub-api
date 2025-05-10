@@ -37,7 +37,12 @@ async function fetchVideos(url, source) {
   $("a").each((i, el) => {
     const href = $(el).attr("href");
     const title = $(el).attr("title") || $(el).text().trim();
-    const thumb = $(el).find("img").attr("data-src") || $(el).find("img").attr("src");
+    let thumb = $(el).find("img").attr("data-src") || $(el).find("img").attr("src");
+
+    // Fix missing or relative thumbnails
+    if (thumb && !thumb.startsWith("http")) {
+      thumb = "https:" + thumb;
+    }
 
     if (href && title && href.includes("/view")) {
       videos.push({
